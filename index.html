@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="재건축·재개발 법령 전문 AI 챗봇 - 도시정비법 전문 상담">
+    <meta name="theme-color" content="#1e40af">
+    
+    <!-- PWA 설정 -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    
+    <title>재건축·재개발 법령 AI 챗봇</title>
+    
+    <!-- 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 스타일 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-balance-scale"></i>
+                <span>재건축·재개발 법령 AI</span>
+            </div>
+            <div class="header-actions">
+                <button id="new-chat-btn" class="btn-icon" title="새 대화">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button id="history-btn" class="btn-icon" title="대화 히스토리">
+                    <i class="fas fa-history"></i>
+                </button>
+                <button id="theme-toggle" class="btn-icon" title="다크모드 전환">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="main-container">
+        <!-- 사이드바 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>대화 히스토리</h3>
+                <button id="close-sidebar" class="btn-icon">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <div id="history-list" class="history-list">
+                    <!-- 히스토리 항목이 동적으로 추가됩니다 -->
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <button id="clear-history-btn" class="btn-secondary">
+                    <i class="fas fa-trash"></i>
+                    모든 히스토리 삭제
+                </button>
+            </div>
+        </aside>
+
+        <!-- 채팅 영역 -->
+        <div class="chat-container">
+            <!-- 웰컴 스크린 -->
+            <div id="welcome-screen" class="welcome-screen">
+                <div class="welcome-content">
+                    <div class="welcome-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h1>재건축·재개발 법령 AI 챗봇</h1>
+                    <p class="welcome-subtitle">도시 및 주거환경정비법 전문 상담</p>
+                    
+                    <div class="quick-questions">
+                        <h3>💡 자주 묻는 질문</h3>
+                        <div class="question-grid">
+                            <button class="question-card" data-question="조합설립 요건은 무엇인가요?">
+                                <i class="fas fa-users"></i>
+                                <span>조합설립 요건</span>
+                            </button>
+                            <button class="question-card" data-question="분양권 전매 제한 기간은 얼마인가요?">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span>분양권 전매</span>
+                            </button>
+                            <button class="question-card" data-question="안전진단 절차는 어떻게 되나요?">
+                                <i class="fas fa-clipboard-check"></i>
+                                <span>안전진단</span>
+                            </button>
+                            <button class="question-card" data-question="추가 분담금 계산 방법을 알려주세요">
+                                <i class="fas fa-calculator"></i>
+                                <span>분담금 계산</span>
+                            </button>
+                            <button class="question-card" data-question="관리처분계획이란 무엇인가요?">
+                                <i class="fas fa-file-alt"></i>
+                                <span>관리처분계획</span>
+                            </button>
+                            <button class="question-card" data-question="현금청산 대상자 기준은?">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>현금청산</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="features">
+                        <div class="feature-item">
+                            <i class="fas fa-book"></i>
+                            <div>
+                                <h4>정확한 법령 근거</h4>
+                                <p>최신 법령 데이터베이스 기반</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-bolt"></i>
+                            <div>
+                                <h4>빠른 답변</h4>
+                                <p>AI 기반 즉시 검색 및 분석</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-link"></i>
+                            <div>
+                                <h4>법령 조항 링크</h4>
+                                <p>관련 조항 바로가기 제공</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 채팅 메시지 영역 -->
+            <div id="chat-messages" class="chat-messages">
+                <!-- 메시지가 동적으로 추가됩니다 -->
+            </div>
+
+            <!-- 입력 영역 -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="message-input" 
+                        placeholder="재건축·재개발에 대해 질문하세요... (예: 조합설립 동의율은?)"
+                        rows="1"
+                    ></textarea>
+                    <button id="send-btn" class="btn-send" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span class="input-hint">
+                        <i class="fas fa-info-circle"></i>
+                        법령 조항 번호나 키워드로도 검색 가능합니다
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 로딩 오버레이 -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>답변 생성 중...</p>
+        </div>
+    </div>
+
+    <!-- Toast 알림 -->
+    <div id="toast" class="toast"></div>
+
+    <!-- 법령 지식베이스 (임베드된 JSON) -->
+    <script id="knowledge-base" type="application/json">
+    {
+        "laws": {
+            "도시정비법": {
+                "name": "도시 및 주거환경정비법",
+                "abbr": "도시정비법",
+                "enacted": "2026-01-02",
+                "sections": {
+                    "조합설립": {
+                        "keywords": ["조합", "설립", "인가", "동의율", "창립총회"],
+                        "articles": [
+                            {
+                                "number": "제35조",
+                                "title": "조합설립인가 등",
+                                "content": "토지등소유자는 정비사업을 시행하기 위하여 토지등소유자로 구성된 조합을 설립할 수 있다. 조합을 설립하려는 경우에는 토지등소유자의 3/4 이상 및 토지면적의 1/2 이상의 토지소유자의 동의를 받아 시장·군수등의 인가를 받아야 한다.",
+                                "category": "조합설립"
+                            },
+                            {
+                                "number": "제36조",
+                                "title": "토지등소유자의 동의방법",
+                                "content": "조합설립 동의는 토지등소유자가 서면으로 하여야 하며, 동의서에는 정비사업의 종류·명칭·정비구역 위치·면적·추진위원회 구성내용 등이 포함되어야 한다.",
+                                "category": "조합설립"
+                            },
+                            {
+                                "number": "제39조",
+                                "title": "조합원의 자격 등",
+                                "content": "재건축사업의 조합원은 재건축사업에 동의한 토지등소유자로 한다. 투기과열지구 내에서는 조합설립인가 이후 건축물 또는 토지를 양수한 자는 조합원이 될 수 없다.",
+                                "category": "조합원자격"
+                            }
+                        ]
+                    },
+                    "분양권전매": {
+                        "keywords": ["분양권", "전매", "제한", "투기과열지구", "조합원입주권"],
+                        "articles": [
+                            {
+                                "number": "제76조 제1항 제7호 라목",
+                                "title": "1+1 분양 전매제한",
+                                "content": "종전 토지·건축물 가격 범위 또는 종전 주택 전용면적 범위에서 2주택을 공급할 수 있고, 이 중 1주택은 주거전용면적을 60제곱미터 이하로 한다. 다만, 60제곱미터 이하로 공급받은 1주택은 제86조제2항에 따른 이전고시일 다음 날부터 3년이 지나기 전에는 주택을 전매하거나 전매를 알선할 수 없다.",
+                                "category": "분양권전매"
+                            },
+                            {
+                                "number": "도시정비법시행령 제37조",
+                                "title": "투기과열지구 조합원 지위 양도 제한",
+                                "content": "투기과열지구에서 재건축은 조합설립인가 후부터, 재개발은 관리처분계획인가 후부터 조합원 지위의 매매·증여가 금지된다. 예외: ① 10년 보유·5년 거주 1주택자 ② 상속·이혼 ③ 세대전원 해외이주 ④ 근무·질병·취학 사유 이주",
+                                "category": "분양권전매"
+                            }
+                        ]
+                    },
+                    "안전진단": {
+                        "keywords": ["안전진단", "재건축진단", "구조안전", "정밀안전진단"],
+                        "articles": [
+                            {
+                                "number": "제12조",
+                                "title": "재건축사업을 위한 재건축진단",
+                                "content": "시장·군수등은 재건축진단을 실시하여야 한다. 건축물 및 부속토지 소유자 10분의 1 이상의 동의를 받아 재건축진단 실시를 요청할 수 있다. 재건축진단은 주거환경 적합성, 구조안전성, 건축마감, 설비노후도 등을 심사한다.",
+                                "category": "안전진단"
+                            }
+                        ]
+                    },
+                    "분담금": {
+                        "keywords": ["분담금", "추가분담금", "비례율", "권리가액"],
+                        "articles": [
+                            {
+                                "number": "계산식",
+                                "title": "분담금 계산 공식",
+                                "content": "비례율 = (총 분양가액 - 총 사업비) ÷ 종전자산 총 평가액 × 100%. 권리가액 = 종전 감정평가액 × 비례율. 분담금 = 조합원 분양가 - 권리가액",
+                                "category": "분담금계산"
+                            }
+                        ]
+                    },
+                    "관리처분": {
+                        "keywords": ["관리처분", "관리처분계획", "분양신청", "권리변환"],
+                        "articles": [
+                            {
+                                "number": "제72조",
+                                "title": "분양공고 및 분양신청",
+                                "content": "사업시행자는 사업시행계획인가 고시일로부터 120일 이내에 토지등소유자에게 분양신청을 통지해야 한다. 분양신청기간은 통지일로부터 30일 이상 60일 이내로 해야 한다.",
+                                "category": "관리처분"
+                            },
+                            {
+                                "number": "제74조",
+                                "title": "관리처분계획의 인가",
+                                "content": "사업시행자는 분양신청 종료 후 관리처분계획을 작성하여 시장·군수등의 인가를 받아야 한다. 관리처분계획에는 분양설계, 분양대상자별 종전 토지·건축물 명세 및 가격, 분양예정 건축물 명세 등이 포함되어야 한다.",
+                                "category": "관리처분"
+                            },
+                            {
+                                "number": "제76조",
+                                "title": "관리처분계획의 수립기준",
+                                "content": "1세대 1주택 원칙. 예외적으로 종전자산가격 또는 종전주택 전용면적 범위에서 2주택 공급 가능 (단, 1주택은 60㎡ 이하)",
+                                "category": "관리처분"
+                            }
+                        ]
+                    },
+                    "현금청산": {
+                        "keywords": ["현금청산", "청산금", "분양미신청", "보상"],
+                        "articles": [
+                            {
+                                "number": "제73조",
+                                "title": "분양신청을 하지 않은 자 등에 대한 조치",
+                                "content": "분양신청기간 내에 분양신청을 하지 않은 자는 종료일 다음날 현금청산대상자가 되며 조합원 지위를 상실한다. 사업시행자는 90일 이내 협의 후 협의 불성립 시 수용재결 또는 매도청구소송 제기 가능",
+                                "category": "현금청산"
+                            },
+                            {
+                                "number": "제89조",
+                                "title": "청산금",
+                                "content": "청산금 = |분양받은 대지·건축물 가격 - 종전 대지·건축물 가격 - 정비사업비|. 양(+)이면 추가 납부, 음(-)이면 환급",
+                                "category": "현금청산"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "faq": [
+            {
+                "question": "조합설립 동의율은?",
+                "answer": "토지등소유자의 3/4 이상 및 토지면적의 1/2 이상 토지소유자의 동의가 필요합니다 (도시정비법 제35조).",
+                "related": ["제35조", "제36조"]
+            },
+            {
+                "question": "투기과열지구 분양권 전매 가능한가요?",
+                "answer": "원칙적으로 금지됩니다. 재건축은 조합설립인가 후, 재개발은 관리처분계획인가 후부터 소유권이전등기일까지 전매 제한. 예외: 10년 보유·5년 거주 1주택자, 상속·이혼, 해외이주 등",
+                "related": ["제39조", "시행령 제37조"]
+            }
+        ]
+    }
+    </script>
+
+    <!-- 스크립트 -->
+    <script src="js/knowledge-base.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/sw-register.js"></script>
+</body>
+</html>
